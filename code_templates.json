@@ -1,0 +1,7 @@
+{
+	"import_template" : "from flask import render_template\nimport logging\n\n", 
+	"configuration_template" : "app = Flask(__name__)\nSECRET_KEY = os.urandom(32)\napp.config['SECRET_KEY'] = SECRET_KEY", 
+	"routing_template" : "@app.route('/{file_name}', methods=['GET', 'POST'])\ndef {file_name}():\n\treturn render_template('{html_file}')\n\n", 
+	"handle_server_network_teplate" : "@app.errorhandler(404)\ndef not_found_error(error):\n\treturn '<h1>404 error</h1>'\n\n\n@app.errorhandler(500)\ndef internal_error(error):\n\treturn '<h1>500 error</h1>'\n\n",
+	"running_part_template" : "if __name__ == '__main__':\n\tapp.run(host='0.0.0.0', port=5000, debug=True)\n\t#logging.basicConfig(filename='logfile.log', level=logging.DEBUG)"
+}

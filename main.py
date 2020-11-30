@@ -1,5 +1,5 @@
 from shutil import copyfile, move, copytree
-import os, re
+import os, re, json
 import fileinput, sys
 
 
@@ -9,7 +9,7 @@ import fileinput, sys
 # I need everything to be automated and clean.. Lets do it :)
 
 # Current TODO List: 30/11/2020
-# add html links edit (inside html files)
+#(not a url or '#')
 # generate a file that routes the pages
 # create some "how to use" guide
 # class that have the functions bellow and also have a class integers (the pathes)
@@ -22,14 +22,28 @@ def clean_text_from_tag(tag, line):
 	pass 
 
 
+def flask_app_creator(templates_folder):
+	with open('code_templates.json') as f:
+		data = json.load(f)
+	#print(list(data.values())[3])
+	
+	html_files = os.listdir(templates_folder)
+	routing_template = ''
+
+	#each file get a route template
+	for html_file in html_files: 
+		routing_template += list(data.values())[2].format(file_name=html_file[:-5], html_file=html_file)
+	
+	print(routing_template)
+	#print(import_template, configuration_template, routing_template, handle_server_network_teplate, running_part_template)
+
 """
 this function will take care the html to be editable and save you time 
 """	
-def html_organize(static_folder):
-	#src, href(not a url or '#')
-	for html_file in os.listdir(static_folder):
-		for line in fileinput.input([r'{}\{}'.format(static_folder, html_file)], inplace=True):
-			#start_param_index
+def html_organize(templates_folder):
+	
+	for html_file in os.listdir(templates_folder):
+		for line in fileinput.input([r'{}\{}'.format(templates_folder, html_file)], inplace=True):
 			sspi = (line.find('src="'), line.find('href="'))
 			if new_line := edit_line(line, "src"):
 				line = line.replace(line, new_line)
@@ -77,11 +91,11 @@ def restructure(bootstrap_folder):
 
 """The fllow will defined here"""
 def main():
-	bootstrap_folder = r'C:\Users\Yaron Shamul\Desktop\iPortfolio'
+	base_folder = r'C:\Users\Yaron Shamul\Desktop\iPortfolio'
 
-	restructure(bootstrap_folder)
-	html_organize(r'{}FLASK-TEMPLATED\templates'.format(bootstrap_folder))
-
+	#restructure(base_folder)
+	#html_organize(r'{}FLASK-TEMPLATED\templates'.format(base_folder))
+	flask_app_creator(r'{}FLASK-TEMPLATED\templates'.format(base_folder))
 
 if __name__ == '__main__':
 	main()
