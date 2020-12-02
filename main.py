@@ -25,18 +25,20 @@ def clean_text_from_tag(tag, line):
 def flask_app_creator(templates_folder):
 	with open('code_templates.json') as f:
 		data = json.load(f)
-	#print(list(data.values())[3])
 	
-	html_files = os.listdir(templates_folder)
+	html_files = os.listdir(r'{}\templates'.format(templates_folder))
 	routing_template = ''
 
 	#each file get a route template
 	for html_file in html_files: 
-		routing_template += list(data.values())[2].format(file_name=html_file[:-5], html_file=html_file)
+		routing_template += list(data.values())[2].format(file_name=html_file[:-5].replace('-', '_'), html_file=html_file)
 	
-	print(routing_template)
-	#print(import_template, configuration_template, routing_template, handle_server_network_teplate, running_part_template)
-
+	data_file = list(data.values())
+	data_file[2] = routing_template
+	data_file = ''.join(data_file)
+	with open(r'{}\app.py'.format(templates_folder), 'a') as app_py:
+		app_py.write(data_file)
+	
 """
 this function will take care the html to be editable and save you time 
 """	
@@ -95,7 +97,11 @@ def main():
 
 	#restructure(base_folder)
 	#html_organize(r'{}FLASK-TEMPLATED\templates'.format(base_folder))
-	flask_app_creator(r'{}FLASK-TEMPLATED\templates'.format(base_folder))
+	flask_app_creator(r'{}FLASK-TEMPLATED'.format(base_folder))
+
 
 if __name__ == '__main__':
 	main()
+
+
+
