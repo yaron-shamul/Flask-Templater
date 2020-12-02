@@ -8,10 +8,11 @@ import fileinput, sys
 # And so then I attched the template here to the project.
 # I need everything to be automated and clean.. Lets do it :)
 
-# Current TODO List: 1/12/2020
+# Current TODO List: 2/12/2020
 #(not a url or '#')
 # create some "how to use" guide
 # class that have the functions bellow and also have a class integers (the pathes)
+# Lorem Ipsum instead of p tags
 # https://startbootstrap.com/themes
 # https://colorlib.com/wp/template/philosophy/
 # https://themewagon.com/thank-you-for-downloading/?item_id=86980&dl=VDQ3OU4rUldFbDZ6ajBzOVBJVnVobzM2STJsaVZPNUpIcGVING5FQ3N0L05hN0xIQnoyWFhkOFpDb3BVNmEwTw==
@@ -21,6 +22,10 @@ def clean_text_from_tag(tag, line):
 	pass 
 
 
+"""
+The function will generate app.py file so you can run and check your 
+flask-templated project app!
+"""
 def flask_app_creator(templates_folder):
 	with open('code_templates.json') as f:
 		data = json.load(f)
@@ -38,8 +43,9 @@ def flask_app_creator(templates_folder):
 	with open(r'{}\app.py'.format(templates_folder), 'a') as app_py:
 		app_py.write(data_file)
 	
+
 """
-this function will take care the html to be editable and save you time 
+This function will take care the html to be editable and save you time 
 """	
 def html_organize(templates_folder):
 	
@@ -70,7 +76,7 @@ def edit_line(line, param):
 		
 
 """
-build the tree structure that familiar with flask project
+Build the tree structure that familiar with flask project
 """
 def restructure(bootstrap_folder):
 
@@ -90,6 +96,9 @@ def restructure(bootstrap_folder):
 				move(r'{}\static\{}'.format(flask_templated, file_name), r'{}\templates\{}'.format(flask_templated, file_name))
 
 
+"""
+Menu and validations for the base-folder
+"""
 def menue():
 	print("~ Welcome to - ")
 	print(u"""
@@ -98,23 +107,32 @@ def menue():
 |    |___ /~~\ .__/ |  \     |  |___  |  | |    |___ /~~\  |  |___ |  \ 
                                                                         
 """)
-
-	base_folder = input("please enter full path for the base-folder:")
-	print(os.path.isdir(base_folder))
-	print(os.path.isdir(r'{}FLASK-TEMPLATED\templates'.format(base_folder)))
-	
-	while os.path.isdir(base_folder) and not os.path.isdir(r'{}FLASK-TEMPLATED\templates'.format(base_folder)):
-
-		print("something went wrong with - ")
+	try:
 		base_folder = input("please enter full path for the base-folder:")
+		
+		# the base_folder need to be created and the path length need to be at least 5
+		validations = [len(base_folder) < 5, os.path.isdir(base_folder), os.path.isdir(r'{}FLASK-TEMPLATED\templates'.format(base_folder))]
+		while any(validations):
+			validations = [len(base_folder) < 5, os.path.isdir(base_folder), os.path.isdir(r'{}FLASK-TEMPLATED\templates'.format(base_folder))]
 
+			if validations[0]:
+				print("Something is wrong with the length!")
+			elif validations[1]:
+				print("There is alredy a base-folder!")
+			elif validations[2]:
+				print("There is alredy a flask_templated-folder!")
+			if any(validations):
+				base_folder = input("Please enter again full path for the base-folder:")
 
+		return base_folder
+	except Exception as e:
+		print(e)
 
 
 """The fllow will defined here"""
 def main():
 	base_folder = r'C:\Users\Yaron Shamul\Desktop\iPortfolio'
-	path = menue()
+	#base_folder = menue()
 	restructure(base_folder)
 	html_organize(r'{}FLASK-TEMPLATED\templates'.format(base_folder))
 	flask_app_creator(r'{}FLASK-TEMPLATED'.format(base_folder))
