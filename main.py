@@ -8,9 +8,8 @@ import fileinput, sys
 # And so then I attched the template here to the project.
 # I need everything to be automated and clean.. Lets do it :)
 
-# Current TODO List: 30/11/2020
+# Current TODO List: 1/12/2020
 #(not a url or '#')
-# generate a file that routes the pages
 # create some "how to use" guide
 # class that have the functions bellow and also have a class integers (the pathes)
 # https://startbootstrap.com/themes
@@ -89,14 +88,35 @@ def restructure(bootstrap_folder):
 		for file_name in os.listdir(r'{}\static'.format(flask_templated)):
 			if file_name.endswith('.html'): # we can assume there is no unusals
 				move(r'{}\static\{}'.format(flask_templated, file_name), r'{}\templates\{}'.format(flask_templated, file_name))
+
+
+def menue():
+	print("~ Welcome to - ")
+	print(u"""
+ ___            __          ___  ___        __            ___  ___  __  
+|__  |     /\  /__` |__/ __  |  |__   |\/| |__) |     /\   |  |__  |__) 
+|    |___ /~~\ .__/ |  \     |  |___  |  | |    |___ /~~\  |  |___ |  \ 
+                                                                        
+""")
+
+	base_folder = input("please enter full path for the base-folder:")
+	print(os.path.isdir(base_folder))
+	print(os.path.isdir(r'{}FLASK-TEMPLATED\templates'.format(base_folder)))
 	
+	while os.path.isdir(base_folder) and not os.path.isdir(r'{}FLASK-TEMPLATED\templates'.format(base_folder)):
+
+		print("something went wrong with - ")
+		base_folder = input("please enter full path for the base-folder:")
+
+
+
 
 """The fllow will defined here"""
 def main():
 	base_folder = r'C:\Users\Yaron Shamul\Desktop\iPortfolio'
-
-	#restructure(base_folder)
-	#html_organize(r'{}FLASK-TEMPLATED\templates'.format(base_folder))
+	path = menue()
+	restructure(base_folder)
+	html_organize(r'{}FLASK-TEMPLATED\templates'.format(base_folder))
 	flask_app_creator(r'{}FLASK-TEMPLATED'.format(base_folder))
 
 
