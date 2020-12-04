@@ -16,7 +16,11 @@ import fileinput, sys
 # https://startbootstrap.com/themes
 # https://colorlib.com/wp/template/philosophy/
 # https://themewagon.com/thank-you-for-downloading/?item_id=86980&dl=VDQ3OU4rUldFbDZ6ajBzOVBJVnVobzM2STJsaVZPNUpIcGVING5FQ3N0L05hN0xIQnoyWFhkOFpDb3BVNmEwTw==
-
+"""Hi everyone,
+I thought it will be nice to share, I creted a git project to help flask developers to use html-templates / readymade bootstraps and to make it easier and faster.
+The project make generic render by flask conventions and help you to save time. Hope you enjoy this and I would like to get some help with this project to accelerate the first version.
+So no more talking here is the link for the project - https://github.com/yaron-shamul/Flask-Templater
+P.S. - The readme is'nt ready yet because I wanted to build some infrastructure for the project."""
 
 def clean_text_from_tag(tag, line):
 	pass 
