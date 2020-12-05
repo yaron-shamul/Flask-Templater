@@ -24,7 +24,7 @@ P.S. - The readme is'nt ready yet because I wanted to build some infrastructure 
 
 def clean_text_from_tag(tag, line):
 	pass 
-	
+
 
 """
 The function will generate app.py file so you can run and check your 
@@ -133,6 +133,7 @@ def menue():
 		print(e)
 
 
+
 """The fllow will defined here"""
 def main():
 	base_folder = r'C:\Users\Yaron Shamul\Desktop\iPortfolio'
@@ -140,6 +141,7 @@ def main():
 	restructure(base_folder)
 	html_organize(r'{}FLASK-TEMPLATED\templates'.format(base_folder))
 	flask_app_creator(r'{}FLASK-TEMPLATED'.format(base_folder))
+
 
 
 if __name__ == '__main__':
