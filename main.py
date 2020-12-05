@@ -133,7 +133,6 @@ def menue():
 		print(e)
 
 
-
 """The fllow will defined here"""
 def main():
 	base_folder = r'C:\Users\Yaron Shamul\Desktop\iPortfolio'
