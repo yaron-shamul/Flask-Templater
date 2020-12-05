@@ -24,8 +24,7 @@ P.S. - The readme is'nt ready yet because I wanted to build some infrastructure 
 
 def clean_text_from_tag(tag, line):
 	pass 
-
-
+	
 
 """
 The function will generate app.py file so you can run and check your 
