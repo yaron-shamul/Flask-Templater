@@ -1,29 +1,51 @@
 from shutil import copyfile, move, copytree
-import os, re, json
 import fileinput, sys
+import os, re, json
 
 
+# Yaron-Shamul @ github.com
+
+# - - - - - The idea - - - - - - - 
 # Hello Every one who watch this tool, I want to build something that will
 # make it easier to build and use html-templates with Flask. 
 # And so then I attched the template here to the project.
 # I need everything to be automated and clean.. Lets do it :)
+# - - - - - - - - - - - - - - - - -
 
-# Current TODO List: 2/12/2020
-#(not a url or '#')
-# create some "how to use" guide
-# class that have the functions bellow and also have a class integers (the pathes)
-# Lorem Ipsum instead of p tags
+
+# - - - - - An amzing websites that offers bootstrap / web templates - - - - - -
 # https://startbootstrap.com/themes
 # https://colorlib.com/wp/template/philosophy/
 # https://themewagon.com/thank-you-for-downloading/?item_id=86980&dl=VDQ3OU4rUldFbDZ6ajBzOVBJVnVobzM2STJsaVZPNUpIcGVING5FQ3N0L05hN0xIQnoyWFhkOFpDb3BVNmEwTw==
-"""Hi everyone,
-I thought it will be nice to share, I creted a git project to help flask developers to use html-templates / readymade bootstraps and to make it easier and faster.
-The project make generic render by flask conventions and help you to save time. Hope you enjoy this and I would like to get some help with this project to accelerate the first version.
-So no more talking here is the link for the project - https://github.com/yaron-shamul/Flask-Templater
-P.S. - The readme is'nt ready yet because I wanted to build some infrastructure for the project."""
+# - - - - - - - - - - - - - - - - -
 
+
+# - - - - - - - - - - - - - - - - -
+# Current TODO List: 2/12/2020
+#(not a url or '#')
+# - Improve the "how to use" guide
+# - class that have the functions bellow and also have a class-integers (the pathes)
+# - Lorem Ipsum instead of p tags
+# - - - - - - - - - - - - - - - - -
+
+
+
+"""
+its a TODO function
+here we want recursively rebuild tags if includes text, without touch
+urls and important data / functions.
+"""
 def clean_text_from_tag(tag, line):
 	pass 
+
+
+def menue_prints():
+	print('$ Yaron-Shamul @ github.com')
+	print(u"""
+ ___            __          ___  ___        __            ___  ___  __  
+|__  |     /\  /__` |__/ __  |  |__   |\/| |__) |     /\   |  |__  |__) 
+|    |___ /~~\ .__/ |  \     |  |___  |  | |    |___ /~~\  |  |___ |  \ """)
+
 
 
 """
@@ -104,13 +126,7 @@ def restructure(bootstrap_folder):
 Menu and validations for the base-folder
 """
 def menue():
-	print("~ Welcome to - ")
-	print(u"""
- ___            __          ___  ___        __            ___  ___  __  
-|__  |     /\  /__` |__/ __  |  |__   |\/| |__) |     /\   |  |__  |__) 
-|    |___ /~~\ .__/ |  \     |  |___  |  | |    |___ /~~\  |  |___ |  \ 
-                                                                        
-""")
+	menue_prints()
 	try:
 		base_folder = input("please enter full path for the base-folder:")
 		
@@ -133,15 +149,17 @@ def menue():
 		print(e)
 
 
-"""The fllow will defined here"""
+"""
+- The fllow will defined here
+"""
 def main():
-	base_folder = r'C:\Users\Yaron Shamul\Desktop\iPortfolio'
-	#base_folder = menue()
+
+	base_folder = r'C:\Users\Yaron Shamul\Desktop\iPortfolio'  
+	base_folder = menue()
 	restructure(base_folder)
 	html_organize(r'{}FLASK-TEMPLATED\templates'.format(base_folder))
 	flask_app_creator(r'{}FLASK-TEMPLATED'.format(base_folder))
-
-
+	
 
 if __name__ == '__main__':
 	main()
