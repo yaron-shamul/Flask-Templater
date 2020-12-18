@@ -95,8 +95,11 @@ def edit_line(line, param):
 	
 		end_param_content = re.findall('{}="(.*?)"'.format(param), line)[0] 
 		end_param_index = len(end_param_content)
-		new_line = line[:start_param_index] + param + "=\"{{ url_for('static', filename='" + end_param_content + "') }} " + line[start_param_index + end_param_index + 6:]
+		quotation_marks = line[start_param_index + end_param_index + 6:]
+		if not quotation_marks.startswith('"'):
+			quotation_marks = '"{}'.format(quotation_marks)
 
+		new_line = "{0}{1}=\"{{ url_for('static', filename='{2}') }}{3}".format(line[:start_param_index], param, end_param_content, quotation_marks)
 		
 		return new_line
 		
