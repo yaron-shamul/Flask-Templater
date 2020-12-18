@@ -74,9 +74,9 @@ def flask_app_creator(templates_folder):
 This function will take care the html to be editable and save you time 
 """	
 def html_organize(templates_folder):
-	
 	for html_file in os.listdir(templates_folder):
 		for line in fileinput.input([r'{}\{}'.format(templates_folder, html_file)], inplace=True):
+
 			sspi = (line.find('src="'), line.find('href="'))
 			if new_line := edit_line(line, "src"):
 				line = line.replace(line, new_line)
@@ -131,10 +131,10 @@ def menue():
 		base_folder = input("please enter full path for the base-folder:")
 		
 		# the base_folder need to be created and the path length need to be at least 5
-		validations = [len(base_folder) < 5, os.path.isdir(base_folder), os.path.isdir(r'{}FLASK-TEMPLATED\templates'.format(base_folder))]
+		validations = [len(base_folder) < 5 ,not os.path.isdir(base_folder), os.path.isdir(r'{}FLASK-TEMPLATED\templates'.format(base_folder))]
 		while any(validations):
-			validations = [len(base_folder) < 5, os.path.isdir(base_folder), os.path.isdir(r'{}FLASK-TEMPLATED\templates'.format(base_folder))]
-
+			validations = [len(base_folder) < 5, not os.path.isdir(base_folder), os.path.isdir(r'{}FLASK-TEMPLATED\templates'.format(base_folder))]
+		
 			if validations[0]:
 				print("Something is wrong with the length!")
 			elif validations[1]:
