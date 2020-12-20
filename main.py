@@ -99,8 +99,8 @@ def edit_line(line, param):
 		if not quotation_marks.startswith('"'):
 			quotation_marks = '"{}'.format(quotation_marks)
 
-		new_line = line[:start_param_index] + param + "=\"{{ url_for('static', filename='" + end_param_content + "') }}" + quotation_marks
-		return new_line
+		start_tag = line[:start_param_index]
+		return f"{start_tag}{param}=\"{{{{ url_for('static', filename='{end_param_content}') }}}}{quotation_marks}"
 		
 
 """
