@@ -40,18 +40,28 @@ def clean_text_from_tag(tag, line):
 
 
 def header_compress(templates_path):
-	decoretor = """{% extends 'main/header.html' %}
+	start_decorate = """{% extends 'main/header.html' %}
 
-{% block content %}"""
-	import re
+{% block content %}\n\n"""
+	end_decorate = """{% endblock %}"""
+	pattern = r"<head>(.*?)</head>"
+
+	diff_head_content = ""
 	for file_name in os.listdir(templates_path):
 		filepath = os.path.join(templates_path, file_name)
-		with open(filepath, "r+") as f:
-			pattern = r"<head>(.*?)</head>"
-			content = f.read()
-			newText = re.findall(pattern, content , flags=re.DOTALL)
-			content = content.replace(''.join(newText), '')
-			f.write(decoretor+content[48:])
+		with open(filepath, "r+") as file:
+			html_content = file.read()
+			file.seek(0)
+    
+
+			header_content = ''.join(re.findall(pattern, html_content , flags=re.DOTALL))
+			diff_head_content += header_content
+			html_content = html_content.replace(header_content, '')
+			
+			file.write(start_decorate + html_content[48:] + end_decorate)
+			file.truncate()
+			file.flush()
+	print(diff_head_content)
 
 		
 		#for line in fileinput.input([r'{}\{}'.format(templates_folder, html_file)], inplace=True):
