@@ -40,6 +40,7 @@ def clean_text_from_tag(tag, line):
 
 
 def header_compress(templates_path):
+	from collections import OrderedDict
 	start_decorate = """{% extends 'main/header.html' %}
 
 {% block content %}\n\n"""
@@ -61,7 +62,8 @@ def header_compress(templates_path):
 			file.write(start_decorate + html_content[48:] + end_decorate)
 			file.truncate()
 			file.flush()
-	print(diff_head_content)
+	#print(diff_head_content)
+	print('\n'.join(list(OrderedDict.fromkeys(diff_head_content.split('\n')).keys())))
 
 		
 		#for line in fileinput.input([r'{}\{}'.format(templates_folder, html_file)], inplace=True):
