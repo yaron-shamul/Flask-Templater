@@ -53,7 +53,7 @@ def header_compress(templates_path):
 		with open(filepath, "r+") as file:
 			html_content = file.read()
 			file.seek(0)
-    
+	
 
 			header_content = ''.join(re.findall(pattern, html_content , flags=re.DOTALL))
 			diff_head_content += header_content
@@ -62,20 +62,22 @@ def header_compress(templates_path):
 			file.write(start_decorate + html_content[48:] + end_decorate)
 			file.truncate()
 			file.flush()
-	#print(diff_head_content)
-	print('\n'.join(list(OrderedDict.fromkeys(diff_head_content.split('\n')).keys())))
 
-		
-		#for line in fileinput.input([r'{}\{}'.format(templates_folder, html_file)], inplace=True):
+	# The line bellow will magically will take the diff 
+	# between all the header tags of the files in the templates folder
+	# and puts it inside new file calls header.html
+	header_content = """<head>\n
+	{% load static %}\n""", """</head>\n\n"""
+	diff_head_content = '\n'.join(list(OrderedDict.fromkeys(diff_head_content.split('\n')).keys()))
+	try:
+		with open(f'{templates_path}/header.html','a+') as header_file:
+			header_file.seek(0)
+			header_file.write(f'{header_content[0]} {diff_head_content}\n\n {header_content[1]}')
+			
+	except Exception as e:
+		print('Could not create header file, please try again.')		
+		print(e)
 
-	# simple example
-	#	
-	#	string = "<person>My name is Jo</person>"
-	#	re.findall(pattern, string, flags=0)
-
-	# multiline string example
-	#	string = "<person>My name is:\n Jo</person>"
-	#	
 
 
 
