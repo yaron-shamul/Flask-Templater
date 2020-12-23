@@ -39,6 +39,34 @@ def clean_text_from_tag(tag, line):
 	pass 
 
 
+def header_compress(templates_path):
+	decoretor = """{% extends 'main/header.html' %}
+
+{% block content %}"""
+	import re
+	for file_name in os.listdir(templates_path):
+		filepath = os.path.join(templates_path, file_name)
+		with open(filepath, "r+") as f:
+			pattern = r"<head>(.*?)</head>"
+			content = f.read()
+			newText = re.findall(pattern, content , flags=re.DOTALL)
+			content = content.replace(''.join(newText), '')
+			f.write(decoretor+content[48:])
+
+		
+		#for line in fileinput.input([r'{}\{}'.format(templates_folder, html_file)], inplace=True):
+
+	# simple example
+	#	
+	#	string = "<person>My name is Jo</person>"
+	#	re.findall(pattern, string, flags=0)
+
+	# multiline string example
+	#	string = "<person>My name is:\n Jo</person>"
+	#	
+
+
+
 def menue_prints():
 	print('$ Yaron-Shamul @ github.com')
 	print(u"""
@@ -73,9 +101,9 @@ def flask_app_creator(templates_folder):
 """
 This function will take care the html to be editable and save you time 
 """	
-def html_organize(templates_folder):
-	for html_file in os.listdir(templates_folder):
-		for line in fileinput.input([r'{}\{}'.format(templates_folder, html_file)], inplace=True):
+def html_organize(templates_path):
+	for html_file in os.listdir(templates_path):
+		for line in fileinput.input([r'{}\{}'.format(templates_path, html_file)], inplace=True):
 
 			sspi = (line.find('src="'), line.find('href="'))
 			if new_line := edit_line(line, "src"):
@@ -156,11 +184,14 @@ def menue():
 """
 def main():
 
-	base_folder = r'C:\Users\Yaron Shamul\Desktop\iPortfolio'  
-	base_folder = menue()
+	base_folder = r'C:\Users\Yaron Shamul\Documents\GitHub\Flask-Templater\iPortfolio'  
+	#base_folder = menue()
+	templates_path = r'{}FLASK-TEMPLATED\templates'.format(base_folder)
 	restructure(base_folder)
-	html_organize(r'{}FLASK-TEMPLATED\templates'.format(base_folder))
-	flask_app_creator(r'{}FLASK-TEMPLATED'.format(base_folder))
+
+	html_organize(templates_path)
+	header_compress(templates_path)
+	#flask_app_creator(r'{}FLASK-TEMPLATED'.format(base_folder))
 	
 
 if __name__ == '__main__':
