@@ -53,7 +53,7 @@ def clean_text_from_tag(tag, line):
 here it takes the html file and move the head tag to header.html
 """
 def header_compress(templates_path):
-	pattern, diff_head_content = r'<head>(.*?)</head>', ''
+	head_pattern, title_pattern, diff_head_content = '<head>(.*?)</head>', '<title>(.*?)</title>', ''
 
 	try:
 		with open('code_templates.json') as f:
@@ -71,9 +71,7 @@ def header_compress(templates_path):
 		with open(filepath, "r+") as file:
 			html_content = file.read()
 			file.seek(0)
-	
-
-			header_content = ''.join(re.findall(pattern, html_content , flags=re.DOTALL))
+			header_content = ''.join(re.findall(head_pattern, html_content , flags=re.DOTALL))
 			diff_head_content += header_content
 			html_content = html_content.replace(header_content, '')
 			
@@ -84,6 +82,11 @@ def header_compress(templates_path):
 	# The lines bellow will magically will take the diff 
 	# between all the header tags of the files in the templates folder
 	# and puts it inside new file calls header.html
+	for head_content in diff_head_content:
+		if head_content.startswith('<title>') and head_content.endswith('</title>'):
+			diff_head_content.remove(head_content)
+
+
 	diff_head_content = '\n'.join(list(OrderedDict.fromkeys(diff_head_content.split('\n')).keys()))
 
 	try:
@@ -169,7 +172,7 @@ def restructure(bootstrap_folder):
 	else:    
 		copytree(bootstrap_folder, fr'{flask_templated}\static')
 		
-		for file_name in os.listdir(fr'{flask_templated}\static')
+		for file_name in os.listdir(fr'{flask_templated}\static'):
 			if file_name.endswith('.html'): # we can assume there is no unusals
 				move(f'{flask_templated}\\static\\{file_name}', f'{flask_templated}\\templates\\{file_name}')
 
