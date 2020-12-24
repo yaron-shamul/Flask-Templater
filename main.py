@@ -41,13 +41,11 @@ def clean_text_from_tag(tag, line):
 
 def header_compress(templates_path):
 	from collections import OrderedDict
-	start_decorate = """{% extends 'main/header.html' %}
+	decorate_header = '''{% extends 'main/header.html' %}
 
-{% block content %}\n\n"""
-	end_decorate = """{% endblock %}"""
-	pattern = r"<head>(.*?)</head>"
+{% block content %}\n\n''', '''{% endblock %}'''
+	pattern, diff_head_content = r'<head>(.*?)</head>', ''
 
-	diff_head_content = ""
 	for file_name in os.listdir(templates_path):
 		filepath = os.path.join(templates_path, file_name)
 		with open(filepath, "r+") as file:
@@ -59,16 +57,17 @@ def header_compress(templates_path):
 			diff_head_content += header_content
 			html_content = html_content.replace(header_content, '')
 			
-			file.write(start_decorate + html_content[48:] + end_decorate)
+			file.write(f'{decorate_header[0]}\n {html_content[48:]}\n {decorate_header[1]}')
 			file.truncate()
 			file.flush()
 
-	# The line bellow will magically will take the diff 
+	# The lines bellow will magically will take the diff 
 	# between all the header tags of the files in the templates folder
 	# and puts it inside new file calls header.html
 	header_content = """<head>\n
 	{% load static %}\n""", """</head>\n\n"""
 	diff_head_content = '\n'.join(list(OrderedDict.fromkeys(diff_head_content.split('\n')).keys()))
+
 	try:
 		with open(f'{templates_path}/header.html','a+') as header_file:
 			header_file.seek(0)
@@ -98,7 +97,7 @@ def flask_app_creator(templates_folder):
 	with open('code_templates.json') as f:
 		data = json.load(f)
 	
-	html_files = os.listdir(r'{}\templates'.format(templates_folder))
+	html_files = os.listdir(fr'{templates_folder}\templates')
 	routing_template = ''
 
 	#each file get a route template
@@ -108,7 +107,7 @@ def flask_app_creator(templates_folder):
 	data_file = list(data.values())
 	data_file[2] = routing_template
 	data_file = ''.join(data_file)
-	with open(r'{}\app.py'.format(templates_folder), 'a') as app_py:
+	with open(fr'{templates_folder}\app.py', 'a') as app_py:
 		app_py.write(data_file)
 	
 
@@ -117,7 +116,7 @@ This function will take care the html to be editable and save you time
 """	
 def html_organize(templates_path):
 	for html_file in os.listdir(templates_path):
-		for line in fileinput.input([r'{}\{}'.format(templates_path, html_file)], inplace=True):
+		for line in fileinput.input([f'{templates_path}\\{html_file}'], inplace=True):
 
 			sspi = (line.find('src="'), line.find('href="'))
 			if new_line := edit_line(line, "src"):
@@ -132,14 +131,14 @@ def html_organize(templates_path):
 This one will generically handle the rendering and templating html line by it's param.
 """
 def edit_line(line, param):
-	start_param_index = line.find('{}="'.format(param))					
+	start_param_index = line.find(f'{param}="')					
 	if start_param_index >= 0: # param appears in the line
 	
-		end_param_content = re.findall('{}="(.*?)"'.format(param), line)[0] 
+		end_param_content = re.findall(f'{param}="(.*?)"', line)[0] 
 		end_param_index = len(end_param_content)
 		quotation_marks = line[start_param_index + end_param_index + 6:]
 		if not quotation_marks.startswith('"'):
-			quotation_marks = '"{}'.format(quotation_marks)
+			quotation_marks = f'"{quotation_marks}'
 
 		start_tag = line[:start_param_index]
 		return f"{start_tag}{param}=\"{{{{ url_for('static', filename='{end_param_content}') }}}}{quotation_marks}"
@@ -150,20 +149,20 @@ Build the tree structure that familiar with flask project
 """
 def restructure(bootstrap_folder):
 
-	flask_templated = '{}FLASK-TEMPLATED'.format(bootstrap_folder)	
+	flask_templated = f'{bootstrap_folder}FLASK-TEMPLATED'
 	try:
 		os.mkdir(flask_templated)
-		os.mkdir(r'{}\templates'.format(flask_templated))
+		os.mkdir(fr'{flask_templated}\templates')
 
 	except Exception as e:
 		print(e)
 		
 	else:    
-		copytree(bootstrap_folder, r'{}\static'.format(flask_templated))
+		copytree(bootstrap_folder, fr'{flask_templated}\static')
 		
-		for file_name in os.listdir(r'{}\static'.format(flask_templated)):
+		for file_name in os.listdir(fr'{flask_templated}\static')
 			if file_name.endswith('.html'): # we can assume there is no unusals
-				move(r'{}\static\{}'.format(flask_templated, file_name), r'{}\templates\{}'.format(flask_templated, file_name))
+				move(f'{flask_templated}\\static\\{file_name}', f'{flask_templated}\\templates\\{file_name}')
 
 
 """
@@ -175,9 +174,9 @@ def menue():
 		base_folder = input("please enter full path for the base-folder:")
 		
 		# the base_folder need to be created and the path length need to be at least 5
-		validations = [len(base_folder) < 5 ,not os.path.isdir(base_folder), os.path.isdir(r'{}FLASK-TEMPLATED\templates'.format(base_folder))]
+		validations = [len(base_folder) < 5 ,not os.path.isdir(base_folder), os.path.isdir(fr'{base_folder}FLASK-TEMPLATED\templates')]
 		while any(validations):
-			validations = [len(base_folder) < 5, not os.path.isdir(base_folder), os.path.isdir(r'{}FLASK-TEMPLATED\templates'.format(base_folder))]
+			validations = [len(base_folder) < 5, not os.path.isdir(base_folder), os.path.isdir(fr'{base_folder}FLASK-TEMPLATED\templates')]
 		
 			if validations[0]:
 				print("Something is wrong with the length!")
@@ -199,8 +198,8 @@ def menue():
 def main():
 
 	base_folder = r'C:\Users\Yaron Shamul\Documents\GitHub\Flask-Templater\iPortfolio'  
-	#base_folder = menue()
-	templates_path = r'{}FLASK-TEMPLATED\templates'.format(base_folder)
+	# base_folder = menue()
+	templates_path = fr'{base_folder}FLASK-TEMPLATED\templates'
 	restructure(base_folder)
 
 	html_organize(templates_path)
