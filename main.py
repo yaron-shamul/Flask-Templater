@@ -1,4 +1,5 @@
 from shutil import copyfile, move, copytree
+from collections import OrderedDict
 import fileinput, sys
 import os, re, json
 
@@ -21,12 +22,20 @@ import os, re, json
 
 
 # - - - - - - - - - - - - - - - - -
-# Current TODO List: 2/12/2020
-#(not a url or '#')
+# Current TODO List: 1/1/2021
+# - check if src/ href is not a url or '#'
 # - Improve the "how to use" guide
 # - class that have the functions bellow and also have a class-integers (the pathes)
 # - Lorem Ipsum instead of p tags
 # - - - - - - - - - - - - - - - - -
+
+
+def menue_prints():
+	print('$ Yaron-Shamul @ github.com')
+	print(u"""
+ ___            __          ___  ___        __            ___  ___  __  
+|__  |     /\  /__` |__/ __  |  |__   |\/| |__) |     /\   |  |__  |__) 
+|    |___ /~~\ .__/ |  \     |  |___  |  | |    |___ /~~\  |  |___ |  \ """)
 
 
 
@@ -39,12 +48,23 @@ def clean_text_from_tag(tag, line):
 	pass 
 
 
-def header_compress(templates_path):
-	from collections import OrderedDict
-	decorate_header = '''{% extends 'main/header.html' %}
 
-{% block content %}\n\n''', '''{% endblock %}'''
+"""
+here it takes the html file and move the head tag to header.html
+"""
+def header_compress(templates_path):
 	pattern, diff_head_content = r'<head>(.*?)</head>', ''
+
+	try:
+		with open('code_templates.json') as f:
+			data = json.load(f)
+		decorate_header = list(data.values())[5]
+		head_tag = list(data.values())[6]
+		 
+	except Exception as e:
+		print(e)		
+		print('Could not open code_templates.json, please try again.')		
+
 
 	for file_name in os.listdir(templates_path):
 		filepath = os.path.join(templates_path, file_name)
@@ -64,28 +84,16 @@ def header_compress(templates_path):
 	# The lines bellow will magically will take the diff 
 	# between all the header tags of the files in the templates folder
 	# and puts it inside new file calls header.html
-	header_content = """<head>\n
-	{% load static %}\n""", """</head>\n\n"""
 	diff_head_content = '\n'.join(list(OrderedDict.fromkeys(diff_head_content.split('\n')).keys()))
 
 	try:
 		with open(f'{templates_path}/header.html','a+') as header_file:
 			header_file.seek(0)
-			header_file.write(f'{header_content[0]} {diff_head_content}\n\n {header_content[1]}')
+			header_file.write(f'{head_tag[0]} {diff_head_content}\n\n {head_tag[1]}')
 			
 	except Exception as e:
 		print('Could not create header file, please try again.')		
 		print(e)
-
-
-
-
-def menue_prints():
-	print('$ Yaron-Shamul @ github.com')
-	print(u"""
- ___            __          ___  ___        __            ___  ___  __  
-|__  |     /\  /__` |__/ __  |  |__   |\/| |__) |     /\   |  |__  |__) 
-|    |___ /~~\ .__/ |  \     |  |___  |  | |    |___ /~~\  |  |___ |  \ """)
 
 
 
@@ -100,7 +108,8 @@ def flask_app_creator(templates_folder):
 	html_files = os.listdir(fr'{templates_folder}\templates')
 	routing_template = ''
 
-	#each file get a route template
+	# each file get a route template
+	# data.values())[2] one of the json template elements
 	for html_file in html_files: 
 		routing_template += list(data.values())[2].format(file_name=html_file[:-5].replace('-', '_'), html_file=html_file)
 	
