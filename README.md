@@ -33,17 +33,17 @@ let's make it easier to build and use web-templates with flask
 
 
 # - Some Points:
-1.
+
  + The app has been coded to listen on port 5000
  + the generator will build the app.py as templates for you to edit and for saving time,
  + it excpects you to take a look and review the solution.
 
-2.
+
  + The code ignore generate header.html in app.py, 
  + so that if your template has a file called header.html you need to change here and in json the configuration (local change obviously)
 
-3.
+
  + App.py accepting POST and GET requests, consider that.
 
-4.
+
  + Title will be generic, if you want to change it you need to go over header.html and edit it.

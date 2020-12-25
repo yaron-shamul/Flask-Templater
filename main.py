@@ -32,7 +32,7 @@ import itertools
 # - - - - - - - - - - - - - - - - -
 
 
-# - Some Point:
+# - Some Points:
 
 # + The app has been coded to listen on port 5000
 # + the generator will build the app.py as templates for you to edit and for saving time,
