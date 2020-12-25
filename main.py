@@ -26,10 +26,9 @@ import itertools
 # Current TODO List: 1/1/2021
 # - Inherit from base - make it work
 # - add to header the generic body and footer is exsits
-# - check if src/ href is not a url or '#'
 # - Improve the "how to use" guide
 # - class that have the functions bellow and also have a class-integers (the pathes)
-# - Lorem Ipsum instead of p tags
+# - Lorem Ipsum instead of text inside tags
 # - - - - - - - - - - - - - - - - -
 
 
