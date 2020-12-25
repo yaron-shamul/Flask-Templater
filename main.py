@@ -2,6 +2,7 @@ from shutil import copyfile, move, copytree
 from collections import OrderedDict
 import fileinput, sys
 import os, re, json
+import itertools
 
 
 # Yaron-Shamul @ github.com
@@ -23,6 +24,8 @@ import os, re, json
 
 # - - - - - - - - - - - - - - - - -
 # Current TODO List: 1/1/2021
+# - Inherit from base - make it work
+# - add to header the generic body and footer is exsits
 # - check if src/ href is not a url or '#'
 # - Improve the "how to use" guide
 # - class that have the functions bellow and also have a class-integers (the pathes)
@@ -30,6 +33,15 @@ import os, re, json
 # - - - - - - - - - - - - - - - - -
 
 
+# - Some Point:
+# + The app has been coded to listen on port 5000
+# + the generator will build the app.py as templates for you to edit and for saving time,
+# + it excpects you to take a look and review the solution.
+
+# + The code ignore generate header.html in app.py, 
+# + so that if your template has a file called header.html you need to change here and in json the configuration (local change obviously)
+
+# + App.py accepting POST and GET requests, consider that.
 def menue_prints():
 	print('$ Yaron-Shamul @ github.com')
 	print(u"""
@@ -82,13 +94,17 @@ def header_compress(templates_path):
 	# The lines bellow will magically will take the diff 
 	# between all the header tags of the files in the templates folder
 	# and puts it inside new file calls header.html
+	diff_head_content = diff_head_content.split('\n')
 	for head_content in diff_head_content:
-		if head_content.startswith('<title>') and head_content.endswith('</title>'):
+		if head_content.lstrip().startswith('<title>') and head_content.endswith('</title>'):
 			diff_head_content.remove(head_content)
+		
+	diff_head_content.append('  <title>FLASK-TEMPLATED-TITLE</title>')
 
-
-	diff_head_content = '\n'.join(list(OrderedDict.fromkeys(diff_head_content.split('\n')).keys()))
-
+	# The line bellow will remove duplicates by convert the list to dict,
+	# than it will convert the list to string and seprete every line with \n
+	diff_head_content = '\n'.join(list(dict.fromkeys(diff_head_content)))
+	
 	try:
 		with open(f'{templates_path}/header.html','a+') as header_file:
 			header_file.seek(0)
@@ -118,7 +134,11 @@ def flask_app_creator(templates_folder):
 	
 	data_file = list(data.values())
 	data_file[2] = routing_template
-	data_file = ''.join(data_file)
+
+	# - in case json have nested list we want it to parse
+	#   it as well using the line bellow:
+	# ''.join(list(itertools.chain.from_iterable(data_file)))
+	data_file = ''.join(data_file[:5])
 	with open(fr'{templates_folder}\app.py', 'a') as app_py:
 		app_py.write(data_file)
 	
@@ -173,7 +193,7 @@ def restructure(bootstrap_folder):
 		copytree(bootstrap_folder, fr'{flask_templated}\static')
 		
 		for file_name in os.listdir(fr'{flask_templated}\static'):
-			if file_name.endswith('.html'): # we can assume there is no unusals
+			if file_name.endswith('.html') and file_name != 'header.html': # it assumes there is no unusals
 				move(f'{flask_templated}\\static\\{file_name}', f'{flask_templated}\\templates\\{file_name}')
 
 
@@ -216,7 +236,7 @@ def main():
 
 	html_organize(templates_path)
 	header_compress(templates_path)
-	#flask_app_creator(r'{}FLASK-TEMPLATED'.format(base_folder))
+	flask_app_creator(r'{}FLASK-TEMPLATED'.format(base_folder))
 	
 
 if __name__ == '__main__':

@@ -4,6 +4,6 @@
 	"routing_template" : "@app.route('/{file_name}', methods=['GET', 'POST'])\ndef {file_name}():\n\treturn render_template('{html_file}')\n\n\n", 
 	"handle_server_network_teplate" : "@app.errorhandler(404)\ndef not_found_error(error):\n\treturn '<h1>404 error</h1>'\n\n\n@app.errorhandler(500)\ndef internal_error(error):\n\treturn '<h1>500 error</h1>'\n\n\n\n",
 	"running_part_template" : "if __name__ == '__main__':\n\tapp.run(host='0.0.0.0', port=5000, debug=True)\n\t#logging.basicConfig(filename='logfile.log', level=logging.DEBUG)", 
-	"decorate_header" : ["{% extends 'main/header.html' %}\n\n{% block content %}\n\n", "{% endblock %}"], 
-	"header_content" : ["<head>\n\n{% load static %}\n\n", "</head>\n\n"]
+	"decorate_header" : ["{% extends 'header.html' %}\n\n{% block head %}\n\n", ""],
+	"header_content" : ["<head>\n\n", "</head>\n\n"]
 }
