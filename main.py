@@ -34,6 +34,7 @@ import itertools
 
 
 # - Some Point:
+
 # + The app has been coded to listen on port 5000
 # + the generator will build the app.py as templates for you to edit and for saving time,
 # + it excpects you to take a look and review the solution.
@@ -42,6 +43,11 @@ import itertools
 # + so that if your template has a file called header.html you need to change here and in json the configuration (local change obviously)
 
 # + App.py accepting POST and GET requests, consider that.
+
+# + Title will be generic, if you want to change it you need to go over header.html and edit it.
+
+
+
 def menue_prints():
 	print('$ Yaron-Shamul @ github.com')
 	print(u"""
@@ -60,9 +66,18 @@ def clean_text_from_tag(tag, line):
 	pass 
 
 
+"""
+its a TODO function
+here it takes the html folder and move body tag of each file the to header.html
+"""
+def body_compress(template_path):
+	pass 
+
+
+
 
 """
-here it takes the html file and move the head tag to header.html
+here it takes the html folder and move head tag of each file the to header.html
 """
 def header_compress(templates_path):
 	head_pattern, title_pattern, diff_head_content = '<head>(.*?)</head>', '<title>(.*?)</title>', ''
@@ -167,13 +182,18 @@ def edit_line(line, param):
 	if start_param_index >= 0: # param appears in the line
 	
 		end_param_content = re.findall(f'{param}="(.*?)"', line)[0] 
+		if end_param_content.startswith('#'):
+			return line
+
 		end_param_index = len(end_param_content)
 		quotation_marks = line[start_param_index + end_param_index + 6:]
 		if not quotation_marks.startswith('"'):
 			quotation_marks = f'"{quotation_marks}'
 
 		start_tag = line[:start_param_index]
-		return f"{start_tag}{param}=\"{{{{ url_for('static', filename='{end_param_content}') }}}}{quotation_marks}"
+		edited_tag = f"{start_tag}{param}=\"{{{{ url_for('static', filename='{end_param_content}') }}}}{quotation_marks}"
+		
+		return edited_tag
 		
 
 """
@@ -235,8 +255,8 @@ def main():
 	restructure(base_folder)
 
 	html_organize(templates_path)
-	header_compress(templates_path)
-	flask_app_creator(r'{}FLASK-TEMPLATED'.format(base_folder))
+	#header_compress(templates_path)
+	#flask_app_creator(r'{}FLASK-TEMPLATED'.format(base_folder))
 	
 
 if __name__ == '__main__':
