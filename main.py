@@ -73,7 +73,32 @@ def body_compress(template_path):
 	pass 
 
 
+"""
+The function will ceate an html page for the developer to see what pages
+the app will route and links to those routes.
+Between zero to one (inside the template from json) comes the link and than the text for the link
+"""
+def routing_page(templates_path, app_name):
+	routing_list = []
+	try:
+		with open('code_templates.json') as f:
+			data = json.load(f)
+		indexing_tag = list(data.values())[7]	
+		 
+	except Exception as e:
+		print(e)		
+		print('Could not open code_templates.json, please try again.')	
 
+	for file_name in os.listdir(templates_path):
+		file_link = file_name[:-5].replace('-', '_')
+		routing_list.append(f'{indexing_tag[0]}{file_link}{indexing_tag[1]}{file_name[:-5]}{indexing_tag[2]}\n\n')
+
+
+	with open("routing_template.html") as template_file, open(f"{templates_path}/TEMPLATE-ROUTER-FOR-{app_name}.html", "w") as new_template_file:
+		for line in template_file:
+			new_template_file.write(line)
+			if '<!-- ======= INSERT ROUTE HERE ======= -->' in line:
+				new_template_file.write(f"{''.join(routing_list)}\n\n")
 
 """
 here it takes the html folder and move head tag of each file the to header.html
@@ -254,8 +279,9 @@ def main():
 	restructure(base_folder)
 
 	html_organize(templates_path)
+	routing_page(templates_path, base_folder.split('\\')[-1])
 	#header_compress(templates_path)
-	#flask_app_creator(r'{}FLASK-TEMPLATED'.format(base_folder))
+	flask_app_creator(r'{}FLASK-TEMPLATED'.format(base_folder))
 	
 
 if __name__ == '__main__':
