@@ -273,16 +273,17 @@ def menue():
 """
 def main():
 
-	base_folder = r'C:\Users\Yaron Shamul\Documents\GitHub\Flask-Templater\iPortfolio'  
+	base_folder = r'C:\Users\Yaron Shamul\Documents\GitHub\Flask-Templater\ecohosting-main'  
 	# base_folder = menue()
 	templates_path = fr'{base_folder}FLASK-TEMPLATED\templates'
 	restructure(base_folder)
 
 	html_organize(templates_path)
 	routing_page(templates_path, base_folder.split('\\')[-1])
-	#header_compress(templates_path)
+	# header_compress(templates_path)
 	flask_app_creator(r'{}FLASK-TEMPLATED'.format(base_folder))
 	
+
 
 if __name__ == '__main__':
 	main()
