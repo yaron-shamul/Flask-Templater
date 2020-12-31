@@ -273,7 +273,7 @@ def menue():
 """
 def main():
 
-	base_folder = r'C:\Users\Yaron Shamul\Documents\GitHub\Flask-Templater\ecohosting-main'  
+	base_folder = r'C:\Users\Yaron Shamul\Documents\GitHub\Flask-Templater\map-at-specified-location'  
 	# base_folder = menue()
 	templates_path = fr'{base_folder}FLASK-TEMPLATED\templates'
 	restructure(base_folder)
